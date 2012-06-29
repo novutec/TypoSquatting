@@ -16,7 +16,7 @@ Installation
 
 Installing from source: `git clone git://github.com/novutec/TypoSquatting.git`
 
-See Novutec DomainParser (http://github.com/novutec/domainparser) and install it as well.
+See Novutec DomainParser (http://github.com/novutec/DomainParser) and install it as well.
 
 Move the source code to your preferred project folder.
 
