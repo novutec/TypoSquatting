@@ -25,11 +25,6 @@
 namespace Novutec\TypoSquatting;
 
 /**
- * @see DomainParser/Parser
- */
-require_once 'DomainParser/Parser.php';
-
-/**
  * @see Mapping/AbstractMapping
  */
 require_once 'TypoSquatting/Mapping/AbstractMapping.php';

@@ -19,7 +19,7 @@ Installation
 
 Installing from source: `git clone git://github.com/novutec/TypoSquatting.git` or [download the latest release](https://github.com/novutec/TypoSquatting/zipball/master)
 
-See Novutec DomainParser (http://github.com/novutec/DomainParser) and install it as well.
+See Novutec DomainParser (http://github.com/novutec/DomainParser) or [download the latest release](https://github.com/novutec/DomainParser/zipball/master) and install it as well.
 
 Move the source code to your preferred project folder.
 
@@ -27,6 +27,7 @@ Usage
 -----
 
 * include Typo.php
+`require_once 'DomainParser/Parser.php';`
 `require_once 'TypoSquatting/Typo.php';`
 
 * create typo object
@@ -42,8 +43,13 @@ Usage
 xml. by default it is object. if you want to change that call the format method before calling
 the lookup method or provide it to the constructer. if you are not using object and an
 error occurs, then exceptions will not be trapped within the response and thrown directy.
+
 `$Typo->setFormat('json');`
 `$Typo = new Novutec\TypoSquatting\Typo('json');`
+
+ChangeLog
+---------
+See ChangeLog at https://github.com/novutec/TypoSquatting/wiki/ChangeLog
 
 Issues
 ------
