@@ -107,7 +107,7 @@ abstract class AbstractMapping
     /**
      * Load Mapping
      * 
-     * Returns a mapping object, if not null.
+     * Returns a mapping object, if given layout is not present it will use En.
      *
      * @param  string $layout
      * @return mixed
@@ -119,7 +119,9 @@ abstract class AbstractMapping
             $classname = 'Novutec\TypoSquatting\Mapping_' . ucfirst($layout);
             return new $classname();
         } else {
-            return null;
+            include_once __DIR__ . '/En.php';
+            $classname = 'Novutec\TypoSquatting\Mapping_En';
+            return new $classname();
         }
     }
 }

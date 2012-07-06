@@ -1,12 +1,15 @@
 Novutec TypoSquatting
 =====================
 
-Novutec TypoSquatting lets you determine typos by a given domain name. We also provide
-international keyboard layouts for english, spanish, italian, german and more, so you can
-determine the typos by language.
+To determine typos for a domain name. We also provide international keyboard layouts for
+english, spanish, italian, german and more, so you can determine the typos by your language.
 
-There are filters for missing characters, switching characters, double hitting a button,
-similiar characters, adding prefixes and wrong characters.
+At first it creates domain names by an algorithm to determine by each character of the domain
+name the nearby characters on the keyboard. Afterwards it creates domain names by skipping
+characters and then it will switch the caracters of the given domain name. Then it will
+create domain names by another algorithm to determine simultaneously hitted keys. At least
+we are adding the prefix www and www- to the domain name and estimate similiar characters by
+a language based mapping.
 
 Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
 Licensed under the Apache License, Version 2.0 (the "License").
@@ -14,7 +17,7 @@ Licensed under the Apache License, Version 2.0 (the "License").
 Installation
 ------------
 
-Installing from source: `git clone git://github.com/novutec/TypoSquatting.git`
+Installing from source: `git clone git://github.com/novutec/TypoSquatting.git` or [download the latest release](https://github.com/novutec/TypoSquatting/zipball/master)
 
 See Novutec DomainParser (http://github.com/novutec/DomainParser) and install it as well.
 
@@ -32,15 +35,15 @@ Usage
 * call lookup method
 `$result = $Typo->lookup($domain);`
 
-* if you don't want to use all filters you may change that by providing boolean values
-to the constructer or to call the respective method
-`$Typo = new Novutec\TypoSquatting\Typo(true, true, false, ..);`
+* if you don't want to use all filters you may call the respective method to deactivate it
 `$Typo->setSwitchingLetters(false);`
 
-* you can choose 3 different return types. the types are php array, php object and json. by
-default it is php object. if you want to change that call the format method before calling
-the lookup method.
+* you can choose 5 different return types. the types are array, object, json, serialize and
+xml. by default it is object. if you want to change that call the format method before calling
+the lookup method or provide it to the constructer. if you are not using object and an
+error occurs, then exceptions will not be trapped within the response and thrown directy.
 `$Typo->setFormat('json');`
+`$Typo = new Novutec\TypoSquatting\Typo('json');`
 
 Issues
 ------
@@ -49,6 +52,8 @@ Please report any issues via https://github.com/novutec/TypoSquatting/issues
 
 LICENSE and COPYRIGHT
 ---------------------
+
+Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

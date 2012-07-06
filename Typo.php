@@ -93,7 +93,7 @@ class Typo
     protected $Result;
 
     /**
-     * Output format 'object', 'array' or 'json'
+     * Output format 'object', 'array', 'json', 'serialize' or 'xml'
      * 
      * @var string
      * @access protected
@@ -114,7 +114,7 @@ class Typo
      * @var boolean
      * @access protected
      */
-    protected $useMapping;
+    protected $useMapping = true;
 
     /**
      * Use missed letter to determine typos
@@ -122,7 +122,7 @@ class Typo
      * @var boolean
      * @access protected
      */
-    protected $useMissedLetters;
+    protected $useMissedLetters = true;
 
     /**
      * Use switching letter to determine typos
@@ -130,7 +130,7 @@ class Typo
      * @var boolean
      * @access protected
      */
-    protected $useSwitchingLetters;
+    protected $useSwitchingLetters = true;
 
     /**
      * Use double hitted button to determine typos
@@ -138,7 +138,7 @@ class Typo
      * @var boolean
      * @access protected
      */
-    protected $useDoubleHit;
+    protected $useDoubleHit = true;
 
     /**
      * Add prefix www directly and with - to determine typos
@@ -146,7 +146,7 @@ class Typo
      * @var boolean
      * @access protected
      */
-    protected $useAddingPrefix;
+    protected $useAddingPrefix = true;
 
     /**
      * Use similiar characters to determine typos
@@ -154,38 +154,27 @@ class Typo
      * @var boolean
      * @access protected
      */
-    protected $useSimilarCharacters;
+    protected $useSimilarCharacters = true;
 
     /**
-     * Should the exceptions be thrown or caugth and trapped in the response?
-     *
-     * @var boolean
+     * Encoding of domain name
+     * 
+     * @var string
      * @access protected
      */
-    protected $throwExceptions = false;
+    protected $encoding = 'utf-8';
 
     /**
      * Creates a Typo object
      * 
      * By default all actions will be done
      * 
-     * @param  boolean $useMapping
-     * @param  boolean $useMissedLetters
-     * @param  boolean $useSwitchingLetters
-     * @param  boolean $useDoubleHit
-     * @param  booelan $useAddingPrefix
-     * @param  boolean $useSimilarCharacters
+     * @param  string $format
      * @return void
      */
-    public function __construct($useMapping = true, $useMissedLetters = true, $useSwitchingLetters = true, 
-            $useDoubleHit = true, $useAddingPrefix = true, $useSimilarCharacters = true)
+    public function __construct($format = 'object')
     {
-        $this->useMapping = $useMapping;
-        $this->useMissedLetters = $useMissedLetters;
-        $this->useSwitchingLetters = $useSwitchingLetters;
-        $this->useDoubleHit = $useDoubleHit;
-        $this->useAddingPrefix = $useAddingPrefix;
-        $this->useSimilarCharacters = $useSimilarCharacters;
+        $this->setFormat($format);
     }
 
     /**
@@ -195,33 +184,39 @@ class Typo
      * @param  string $defaultTld optional
      * @return void
      */
-    public function setDomain($domain, $defaultTld = 'com')
+    private function setDomain($domain, $defaultTld = 'com')
     {
-        $Parser = new \Novutec\Domainparser\Parser(true);
+        $Parser = new \Novutec\Domainparser\Parser();
         $Domain = $Parser->parse($domain, $defaultTld);
         
         $this->domain = $Domain->domain;
         $this->hash = $this->mb_str_split($Domain->domain);
         $this->tld = $Domain->tld;
+        
+        if (isset($Domain->error)) {
+            $this->Result->error = $Domain->error;
+        }
     }
 
     /**
      * Looks up for typos
      * 
-     * @param  string $domain optional
+     * @param  string $domain
      * @param  string $defaultTld optional
      * @return array
      */
-    public function lookup($domain = null, $defaultTld = 'com')
+    public function lookup($domain, $defaultTld = 'com')
     {
-        try {
-            if ($domain != null) {
-                $this->setDomain($domain, $defaultTld);
-            } else {
-                return new Result();
-            }
-            
-            $this->Result = new Result($this->domain . '.' . $this->tld);
+        $this->Result = new Result();
+        
+        if ($domain !== null) {
+            $this->setDomain($domain, $defaultTld);
+        } else {
+            return $this->Result;
+        }
+        
+        if (! isset($this->Result->error)) {
+            $this->Result->addItem('domain', $this->domain . '.' . $this->tld);
             
             if ($this->useMapping) {
                 if (! $this->Mapping instanceof AbstractMapping) {
@@ -264,27 +259,9 @@ class Typo
                     $this->getTyposBySimilarCharacters();
                 }
             }
-            
-            switch ($this->format) {
-                case 'json':
-                    return $this->Result->toJson();
-                    break;
-                case 'array':
-                    return $this->Result->toArray();
-                    break;
-                default:
-                    return $this->Result;
-            }
-        } catch (\Novutec\DomainParser\Exception $e) {
-            if ($this->throwExceptions) {
-                throw $e;
-            }
-            
-            $result = new Result();
-            $result->exception = $e;
-            
-            return $result;
         }
+        
+        return $this->Result->get($this->format);
     }
 
     /**
@@ -389,6 +366,17 @@ class Typo
     }
 
     /**
+     * Returns the IPv4 address by domain name
+     * 
+     * @param  string $domain
+     * @return array
+     */
+    public function getIpAddress($domain)
+    {
+        return gethostbynamel($domain);
+    }
+
+    /**
      * Set keyboard layout
      * 
      * @param  string $layout
@@ -396,20 +384,31 @@ class Typo
      */
     public function setLayout($layout = 'en')
     {
-        $this->layout = $layout;
+        $this->layout = filter_var($layout, FILTER_SANITIZE_STRING);
     }
 
     /**
      * Set output format
      * 
-     * You may choose between 'object', 'array' or 'json' output format
+     * You may choose between 'object', 'array', 'json', 'serialize' or 'xml' output format
      * 
      * @param  string $format
      * @return void
      */
     public function setFormat($format = 'object')
     {
-        $this->format = $format;
+        $this->format = filter_var($format, FILTER_SANITIZE_STRING);
+    }
+
+    /**
+     * Set encoding of domain name
+     *
+     * @param  string $encoding
+     * @return void
+     */
+    public function setEncodng($encoding = 'utf-8')
+    {
+        $this->encoding = filter_var($encoding, FILTER_SANITIZE_STRING);
     }
 
     /**
@@ -420,7 +419,7 @@ class Typo
      */
     public function setMapping($useMapping)
     {
-        $this->useMapping = $useMapping;
+        $this->useMapping = filter_var($useMapping, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -431,7 +430,7 @@ class Typo
      */
     public function setMissedLetters($useMissedLetters)
     {
-        $this->useMissedLetters = $useMissedLetters;
+        $this->useMissedLetters = filter_var($useMissedLetters, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -442,7 +441,7 @@ class Typo
      */
     public function setSwitchingLetters($useSwitchingLetters)
     {
-        $this->useSwitchingLetters = $useSwitchingLetters;
+        $this->useSwitchingLetters = filter_var($useSwitchingLetters, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -453,7 +452,7 @@ class Typo
      */
     public function setDoubleHit($useDoubleHit)
     {
-        $this->useDoubleHit = $useDoubleHit;
+        $this->useDoubleHit = filter_var($useDoubleHit, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -464,7 +463,7 @@ class Typo
      */
     public function setAddingPrefix($useAddingPrefix)
     {
-        $this->useAddingPrefix = $useAddingPrefix;
+        $this->useAddingPrefix = filter_var($useAddingPrefix, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -475,72 +474,53 @@ class Typo
      */
     public function setSimilarCharacters($useSimilarCharacters)
     {
-        $this->useSimilarCharacters = $useSimilarCharacters;
-    }
-
-    /**
-     * Set the throwExceptions flag
-     *
-     * Set whether exceptions encounted in the dispatch loop should be thrown
-     * or caught and trapped in the response object.
-     *
-     * Default behaviour is to trap them in the response object; call this
-     * method to have them thrown.
-     *
-     * @param  boolean $throwExceptions
-     * @return void
-     */
-    public function throwExceptions($throwExceptions = false)
-    {
-        $this->throwExceptions = $throwExceptions;
+        $this->useSimilarCharacters = filter_var($useSimilarCharacters, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
      * substr_replace is not working good with utf-8 therefore this is
      * function will mimic substr_replace by using  mb_substr. if mbstring
      * is not compiled within php or not present, it will still try to use
-     * substr_replace
+     * substr_replace. encoding can be set by calling the setEncoding method.
      * 
      * @param  string $string
      * @param  string $replacement
      * @param  integer $start
      * @param  integer $length
-     * @param  string $encoding
      * @return string
      */
-    private function mb_substr_replace($string, $replacement, $start, $length = null, 
-            $encoding = 'utf-8')
+    private function mb_substr_replace($string, $replacement, $start, $length = null)
     {
         if (extension_loaded('mbstring') === true) {
-            $string_length = (is_null($encoding) === true) ? mb_strlen($string) : mb_strlen($string, $encoding);
+            $strLength = (is_null($this->encoding) === true) ? mb_strlen($string) : mb_strlen($string, $this->encoding);
             
             if ($start < 0) {
-                $start = max(0, $string_length + $start);
+                $start = max(0, $strLength + $start);
             } else {
-                if ($start > $string_length) {
-                    $start = $string_length;
+                if ($start > $strLength) {
+                    $start = $strLength;
                 }
             }
             
             if ($length < 0) {
-                $length = max(0, $string_length - $start + $length);
+                $length = max(0, $strLength - $start + $length);
             } else {
-                if ((is_null($length) === true) || ($length > $string_length)) {
-                    $length = $string_length;
+                if ((is_null($length) === true) || ($length > $strLength)) {
+                    $length = $strLength;
                 }
             }
             
-            if (($start + $length) > $string_length) {
-                $length = $string_length - $start;
+            if (($start + $length) > $strLength) {
+                $length = $strLength - $start;
             }
             
-            if (is_null($encoding) === true) {
+            if (is_null($this->encoding) === true) {
                 return mb_substr($string, 0, $start) . $replacement .
-                         mb_substr($string, $start + $length, $string_length - $start - $length);
+                         mb_substr($string, $start + $length, $strLength - $start - $length);
             }
             
-            return mb_substr($string, 0, $start, $encoding) . $replacement .
-                     mb_substr($string, $start + $length, $string_length - $start - $length, $encoding);
+            return mb_substr($string, 0, $start, $this->encoding) . $replacement .
+                     mb_substr($string, $start + $length, $strLength - $start - $length, $this->encoding);
         }
         
         return (is_null($length) === true) ? substr_replace($string, $replacement, $start) : substr_replace($string, $replacement, $start, $length);

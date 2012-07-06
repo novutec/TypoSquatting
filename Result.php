@@ -25,7 +25,7 @@
 namespace Novutec\TypoSquatting;
 
 /**
- * TypoSquattingResult
+ * TypoSquatting Result
  *
  * @category   Novutec
  * @package    TypoSquatting
@@ -94,13 +94,10 @@ class Result
     /**
      * Constructs a new object from by TypoSquatting
      * 
-     * @param  string $domain
      * @return void
      */
-    public function __construct($domain)
-    {
-        $this->domain = $domain;
-    }
+    public function __construct()
+    {}
 
     /**
      * Writing data to properties
@@ -111,8 +108,10 @@ class Result
      */
     public function addItem($type, $value)
     {
-        if (isset($this->{$type}) && !in_array($value, $this->{$type})) {
+        if (isset($this->{$type}) && ! in_array($value, $this->{$type})) {
             $this->{$type}[] = $value;
+        } else {
+            $this->{$type} = $value;
         }
     }
 
@@ -143,6 +142,32 @@ class Result
     }
 
     /**
+     * Returns the result by format
+     *
+     * @param  string $format
+     * @return mixed
+     */
+    public function get($format)
+    {
+        switch ($format) {
+            case 'json':
+                return $this->toJson();
+                break;
+            case 'serialize':
+                return $this->serialize();
+                break;
+            case 'array':
+                return $this->toArray();
+                break;
+            case 'xml':
+                return $this->toXml();
+                break;
+            default:
+                return $this;
+        }
+    }
+
+    /**
      * Convert properties to json
      * 
      * @return string
@@ -159,14 +184,61 @@ class Result
      */
     public function toArray()
     {
-        $output['domain'] = $this->domain;
-        $output['typosByMapping'] = $this->typosByMapping;
-        $output['typosByMissedLetters'] = $this->typosByMissedLetters;
-        $output['typosBySwitchingLetters'] = $this->typosBySwitchingLetters;
-        $output['typosByDoubleHit'] = $this->typosByDoubleHit;
-        $output['typosByAddingPrefix'] = $this->typosByAddingPrefix;
-        $output['typosBySimilarCharacters'] = $this->typosBySimilarCharacters;
+        return get_object_vars($this);
+    }
+
+    /**
+     * Serialize properties
+     * 
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize($this->toArray());
+    }
+
+    /**
+     * Convert properties to xml by using SimpleXMLElement
+     * 
+     * @return string
+     */
+    public function toXml()
+    {
+        $xml = new \SimpleXMLElement(
+                '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><typo></typo>');
         
-        return $output;
+        $xml->addChild('domain', $this->domain);
+        
+        $mapping = $xml->addChild('typosByMapping');
+        foreach ($this->typosByMapping as $key => $typo) {
+            $mapping->addChild('item', $typo);
+        }
+        
+        $missed = $xml->addChild('typosByMissedLetters');
+        foreach ($this->typosByMissedLetters as $key => $typo) {
+            $missed->addChild('item', $typo);
+        }
+        
+        $switch = $xml->addChild('typosBySwitchingLetters');
+        foreach ($this->typosBySwitchingLetters as $key => $typo) {
+            $switch->addChild('item', $typo);
+        }
+        
+        $double = $xml->addChild('typosByDoubleHit');
+        foreach ($this->typosByDoubleHit as $key => $typo) {
+            $double->addChild('item', $typo);
+        }
+        
+        $add = $xml->addChild('typosByAddingPrefix');
+        foreach ($this->typosByAddingPrefix as $key => $typo) {
+            $add->addChild('item', $typo);
+        }
+        
+        $similar = $xml->addChild('typosBySimilarCharacters');
+        foreach ($this->typosBySimilarCharacters as $key => $typo) {
+            $similar->addChild('item', $typo);
+        }
+        
+        return $xml->asXML();
     }
 }
