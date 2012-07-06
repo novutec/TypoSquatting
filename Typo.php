@@ -27,12 +27,12 @@ namespace Novutec\TypoSquatting;
 /**
  * @see Mapping/AbstractMapping
  */
-require_once 'TypoSquatting/Mapping/AbstractMapping.php';
+require_once 'Mapping/AbstractMapping.php';
 
 /**
  * @see Result
  */
-require_once 'TypoSquatting/Result.php';
+require_once 'Result.php';
 
 /**
  * TypoSquatting

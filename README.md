@@ -43,7 +43,6 @@ Usage
 xml. by default it is object. if you want to change that call the format method before calling
 the lookup method or provide it to the constructer. if you are not using object and an
 error occurs, then exceptions will not be trapped within the response and thrown directy.
-
 `$Typo->setFormat('json');`
 `$Typo = new Novutec\TypoSquatting\Typo('json');`
 
