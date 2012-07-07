@@ -16,7 +16,6 @@ Licensed under the Apache License, Version 2.0 (the "License").
 
 Installation
 ------------
-
 Installing from source: `git clone git://github.com/novutec/TypoSquatting.git` or [download the latest release](https://github.com/novutec/TypoSquatting/zipball/master)
 
 See Novutec DomainParser (http://github.com/novutec/DomainParser) or [download the latest release](https://github.com/novutec/DomainParser/zipball/master) and install it as well.
@@ -25,26 +24,35 @@ Move the source code to your preferred project folder.
 
 Usage
 -----
-
 * include Typo.php
-`require_once 'DomainParser/Parser.php';`
-`require_once 'TypoSquatting/Typo.php';`
+```
+require_once 'DomainParser/Parser.php';
+require_once 'TypoSquatting/Typo.php';
+```
 
-* create typo object
-`$Typo = new Novutec\TypoSquatting\Typo();`
+* create Typo() object
+```
+$Typo = new Novutec\TypoSquatting\Typo();
+```
 
-* call lookup method
-`$result = $Typo->lookup($domain);`
+* call lookup() method
+```
+$result = $Typo->lookup($domain);
+```
 
 * if you don't want to use all filters you may call the respective method to deactivate it
-`$Typo->setSwitchingLetters(false);`
+```
+$Typo->setSwitchingLetters(false);
+```
 
 * you can choose 5 different return types. the types are array, object, json, serialize and
 xml. by default it is object. if you want to change that call the format method before calling
 the lookup method or provide it to the constructer. if you are not using object and an
 error occurs, then exceptions will not be trapped within the response and thrown directy.
-`$Typo->setFormat('json');`
-`$Typo = new Novutec\TypoSquatting\Typo('json');`
+```
+$Typo->setFormat('json');
+$Typo = new Novutec\TypoSquatting\Typo('json');
+```
 
 ChangeLog
 ---------
@@ -52,12 +60,10 @@ See ChangeLog at https://github.com/novutec/TypoSquatting/wiki/ChangeLog
 
 Issues
 ------
-
 Please report any issues via https://github.com/novutec/TypoSquatting/issues
 
 LICENSE and COPYRIGHT
 ---------------------
-
 Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
 
 Licensed under the Apache License, Version 2.0 (the "License");

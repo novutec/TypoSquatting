@@ -25,14 +25,19 @@
 namespace Novutec\TypoSquatting;
 
 /**
+ * define TypoSquatting Path
+ */
+define('TYPOSQUATTINGPATH', dirname(__FILE__));
+
+/**
  * @see Mapping/AbstractMapping
  */
-require_once 'Mapping/AbstractMapping.php';
+require_once TYPOSQUATTINGPATH . '/Mapping/AbstractMapping.php';
 
 /**
  * @see Result
  */
-require_once 'Result.php';
+require_once TYPOSQUATTINGPATH . '/Result.php';
 
 /**
  * TypoSquatting
