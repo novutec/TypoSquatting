@@ -111,7 +111,9 @@ class Result
         if (isset($this->{$type}) && ! in_array($value, $this->{$type})) {
             $this->{$type}[] = $value;
         } else {
-            $this->{$type} = $value;
+            if (! isset($this->{$type})) {
+                $this->{$type} = $value;
+            }
         }
     }
 

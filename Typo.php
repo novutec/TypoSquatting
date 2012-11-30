@@ -309,8 +309,11 @@ class Typo
             }
             
             $string = $this->mb_substr_replace($this->domain, $this->hash[$position + 1], $position, 1);
-            $this->Result->addItem('typosBySwitchingLetters', $this->mb_substr_replace($string, $this->hash[$position], $position +
-                     1, 1) . '.' . $this->tld);
+            
+            if ($string != $this->domain) {
+                $this->Result->addItem('typosBySwitchingLetters', $this->mb_substr_replace($string, $this->hash[$position], $position +
+                         1, 1) . '.' . $this->tld);
+            }
         }
     }
 
@@ -355,7 +358,7 @@ class Typo
     {
         foreach ($this->hash as $position => $character) {
             $similar = $this->Mapping->getSimilar($character);
-            
+
             if (! empty($similar)) {
                 foreach ($similar as $typo) {
                     $this->Result->addItem('typosBySimilarCharacters', $this->mb_substr_replace($this->domain, $typo, $position, 1) .

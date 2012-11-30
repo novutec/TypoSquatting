@@ -45,7 +45,13 @@ $result = $Typo->lookup($domain);
 $Typo->setSwitchingLetters(false);
 ```
 
-* you can choose 5 different return types. the types are array, object, json, serialize and
+* you may choose different keyboard layouts, to do so you may call the respective method.
+e.g. en, de, es, fr, it and nl
+```
+$Typo->setLayout('es');
+```
+
+* you may choose 5 different return types. the types are array, object, json, serialize and
 xml. by default it is object. if you want to change that call the format method before calling
 the lookup method or provide it to the constructer. if you are not using object and an
 error occurs, then exceptions will not be trapped within the response and thrown directy.
