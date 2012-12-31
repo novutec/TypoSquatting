@@ -15,7 +15,7 @@
  *
  * @category   Novutec
  * @package    TypoSquatting
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -46,7 +46,7 @@ require_once TYPOSQUATTINGPATH . '/Result.php';
  *
  * @category   Novutec
  * @package    TypoSquatting
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 class Typo

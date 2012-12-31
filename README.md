@@ -1,8 +1,8 @@
 Novutec TypoSquatting
 =====================
 
-To determine typos for a domain name. We also provide international keyboard layouts for
-english, spanish, italian, german and more, so you can determine the typos by your language.
+Find typos of a domain name. We also provide international keyboard layouts for
+English, Spanish, Italian, German and more, so you can determine the typos by your language.
 
 At first it creates domain names by an algorithm to determine by each character of the domain
 name the nearby characters on the keyboard. Afterwards it creates domain names by skipping
@@ -11,7 +11,7 @@ create domain names by another algorithm to determine simultaneously hitted keys
 we are adding the prefix www and www- to the domain name and estimate similiar characters by
 a language based mapping.
 
-Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
 Licensed under the Apache License, Version 2.0 (the "License").
 
 Installation
@@ -24,36 +24,36 @@ Move the source code to your preferred project folder.
 
 Usage
 -----
-* include Typo.php
+* Include Typo.php
 ```
 require_once 'DomainParser/Parser.php';
 require_once 'TypoSquatting/Typo.php';
 ```
 
-* create Typo() object
+* Create Typo() object
 ```
 $Typo = new Novutec\TypoSquatting\Typo();
 ```
 
-* call lookup() method
+* Call lookup() method
 ```
 $result = $Typo->lookup($domain);
 ```
 
-* if you don't want to use all filters you may call the respective method to deactivate it
+* If you don't want to use all filters you may call the respective method to deactivate it
 ```
 $Typo->setSwitchingLetters(false);
 ```
 
-* you may choose different keyboard layouts, to do so you may call the respective method.
-e.g. en, de, es, fr, it and nl
+* You may choose different keyboard layouts, to do so you may call the respective method.
+e.g. en, de, es, fr, it and nl.
 ```
 $Typo->setLayout('es');
 ```
 
-* you may choose 5 different return types. the types are array, object, json, serialize and
-xml. by default it is object. if you want to change that call the format method before calling
-the lookup method or provide it to the constructer. if you are not using object and an
+* You may choose 5 different return types. the types are array, object, json, serialize and
+xml. By default it is object. If you want to change that call the format method before calling
+the lookup method or provide it to the constructer. If you are not using object and an
 error occurs, then exceptions will not be trapped within the response and thrown directy.
 ```
 $Typo->setFormat('json');
@@ -70,7 +70,7 @@ Please report any issues via https://github.com/novutec/TypoSquatting/issues
 
 LICENSE and COPYRIGHT
 ---------------------
-Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
