@@ -1,0 +1,13 @@
+{
+    "name": "novutec/TypoSquatting"
+  , "type": "library"
+  , "description": "A domain name typo finder to determine typos of a domain name."
+  , "keywords": ["typosquatting", "typo", "php"]
+  , "homepage": "https://github.com/novutec/TypoSquatting/"
+  , "author": "Novutec Inc."
+  , "license": "Apache-2.0"
+  , "require": {
+  		"novutec/DomainParser": ">=1.1.5"
+  	}
+  , "version": "1.1.4"
+}

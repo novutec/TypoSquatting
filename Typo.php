@@ -358,7 +358,7 @@ class Typo
     {
         foreach ($this->hash as $position => $character) {
             $similar = $this->Mapping->getSimilar($character);
-
+            
             if (! empty($similar)) {
                 foreach ($similar as $typo) {
                     $this->Result->addItem('typosBySimilarCharacters', $this->mb_substr_replace($this->domain, $typo, $position, 1) .

@@ -1,8 +1,9 @@
-Novutec TypoSquatting
-=====================
+Novutec Typo Squatting
+======================
 
-Find typos of a domain name. We also provide international keyboard layouts for
-English, Spanish, Italian, German and more, so you can determine the typos by your language.
+A domain name typo finder to determine typos of a domain name.
+
+We also provide international keyboard layouts for English, Spanish, Italian, German and more, so you can determine the typos by your language.
 
 At first it creates domain names by an algorithm to determine by each character of the domain
 name the nearby characters on the keyboard. Afterwards it creates domain names by skipping
@@ -18,7 +19,7 @@ Installation
 ------------
 Installing from source: `git clone git://github.com/novutec/TypoSquatting.git` or [download the latest release](https://github.com/novutec/TypoSquatting/zipball/master)
 
-See Novutec DomainParser (http://github.com/novutec/DomainParser) or [download the latest release](https://github.com/novutec/DomainParser/zipball/master) and install it as well.
+See Novutec Domain Parser (http://github.com/novutec/DomainParser) or [download the latest release](https://github.com/novutec/DomainParser/zipball/master) and install it as well.
 
 Move the source code to your preferred project folder.
 
@@ -62,7 +63,7 @@ $Typo = new Novutec\TypoSquatting\Typo('json');
 
 ChangeLog
 ---------
-See ChangeLog at https://github.com/novutec/TypoSquatting/wiki/ChangeLog
+See ChangeLog at https://github.com/novutec/TypoSquatting/blob/master/CHANGELOG.md
 
 Issues
 ------
