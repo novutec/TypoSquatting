@@ -1,4 +1,8 @@
-### 1.1.4 (Jan 14, 2013)
+### 1.1.5 (Mar 18, 2013)
+* changed own version in composer.json
+* fixed release dates in CHANGELOG.md
+
+### 1.1.4 (Mar 14, 2013)
 * added composer.json
 * added CHANGELOG.md
 * changed link to CHANGELOG.md in README.md
