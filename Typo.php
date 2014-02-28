@@ -186,7 +186,7 @@ class Typo
      */
     private function setDomain($domain, $defaultTld = 'com')
     {
-        $Parser = new \Novutec\Domainparser\Parser();
+        $Parser = new \Novutec\DomainParser\Parser();
         $Domain = $Parser->parse($domain, $defaultTld);
         
         $this->domain = $Domain->domain;
